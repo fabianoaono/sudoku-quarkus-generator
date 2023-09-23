@@ -1,5 +1,6 @@
 package com.fabianoaono.sudoku.service;
 
+import com.fabianoaono.sudoku.config.Difficulty;
 import com.fabianoaono.sudoku.model.SudokuBoard;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -31,7 +32,8 @@ public class SudokuService {
     };
 
 
-    public SudokuBoard generateSudokuBoard() {
-        return new SudokuBoard(values, solution);
+    public SudokuBoard generateSudokuBoard(Difficulty difficulty) {
+        System.out.println("Generating sudoku board of difficulty:" + difficulty);
+        return new SudokuBoard(values, solution, difficulty);
     }
 }
