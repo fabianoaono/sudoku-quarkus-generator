@@ -2,7 +2,11 @@ package com.fabianoaono.sudoku.service;
 
 import com.fabianoaono.sudoku.config.Difficulty;
 import com.fabianoaono.sudoku.model.SudokuBoard;
+import com.fabianoaono.sudoku.service.generator.SudokuGenerator;
+import com.fabianoaono.sudoku.service.generator.SudokuGeneratorResult;
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.util.Random;
 
 @ApplicationScoped
 public class SudokuService {
@@ -31,9 +35,19 @@ public class SudokuService {
         {5, 2, 1, 7, 8, 6, 4, 9, 3}
     };
 
-
     public SudokuBoard generateSudokuBoard(Difficulty difficulty) {
         System.out.println("Generating sudoku board of difficulty:" + difficulty);
-        return new SudokuBoard(values, solution, difficulty);
+        SudokuGeneratorResult result = SudokuGenerator.generateUniqueSudoku(getNumberOfEmptyCells(difficulty));
+        return SudokuBoard.builder()
+                .values(result.getBoard())
+                .solution(result.getSolution())
+                .difficulty(difficulty)
+                .emptyCells(result.getEmptyCells())
+                .build();
+    }
+
+    private int getNumberOfEmptyCells(Difficulty difficulty) {
+        Random rand = new Random();
+        return rand.nextInt((difficulty.getMaxEmptyCells() - difficulty.getMinEmptyCells()) + 1) + difficulty.getMinEmptyCells();
     }
 }
